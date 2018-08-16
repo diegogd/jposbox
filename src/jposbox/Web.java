@@ -83,8 +83,6 @@ public class Web {
     return result;
     }
     
-
-    
     
     static class Hello implements HttpHandler {
         @Override

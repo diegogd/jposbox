@@ -14,7 +14,7 @@ public class JPosbox {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) {        
         PosBoxFrame frame = new PosBoxFrame();
         frame.LoadDB();
         frame.setVisible(true);
