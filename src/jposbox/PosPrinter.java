@@ -5,6 +5,7 @@
  */
 package jposbox;
 
+import java.awt.Font;
 import java.awt.print.PrinterException;
 import static java.lang.System.out;
 import java.util.logging.Level;
@@ -22,6 +23,8 @@ import javax.print.attribute.PrintServiceAttributeSet;
 import javax.print.attribute.standard.MediaPrintableArea;
 import javax.print.attribute.standard.PrinterName;
 import javax.swing.JEditorPane;
+import javax.swing.JTextPane;
+import javax.swing.text.Style;
 
 /**
  *
@@ -110,6 +113,7 @@ public class PosPrinter {
     
     
     void print(String printer, int copies, String FontSize) {
+        out.println("Text encode"+ P);
         if (printer.equals("nada")) {out.println("Printer not configured"); return;}
         PrintService[] printServices; // PARA WINDOWS
         PrintServiceAttributeSet printServiceAttributeSet = new HashPrintServiceAttributeSet();
@@ -118,7 +122,7 @@ public class PosPrinter {
         PrintService printService=PrintServiceLookup.lookupDefaultPrintService();
         
         if (html==false){
-            
+            out.println("html=false");
             if (copies>1) P=P+P;
             if (copies>2) P=P+P;
             DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
@@ -134,18 +138,24 @@ public class PosPrinter {
         
         
         else {
+            out.println("html=true");
             try {
                 MediaPrintableArea mpa=new MediaPrintableArea(0,0,200,275,MediaPrintableArea.MM);
                 HashPrintRequestAttributeSet hpras=new HashPrintRequestAttributeSet(mpa);
-                final JEditorPane ed = new JEditorPane(
+//                P="ขอม";
+                JEditorPane ed = new JEditorPane(
                         "text/html",
-                        "<html><head><style>body{font-size:"+FontSize+"px;}</style></head><body>"+P+"</body></html>");
-                if (/*System.getProperty("os.name").contains("Windows")*/ 1==1){ //POR EL MOTIVO QUE SEA, AHORA ME HA FUNCIONADO CON LINUX
+                        "<html><head><style>body{font-size:"+FontSize+"px;}</style></head><body>"+P+"</body></html>");                                                  
+                ed.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
+                
+                ed.setFont(new Font("Khmer OS Content", Font.PLAIN, 12));
+                if (/*System.getProperty("os.name").contains("Windows")*/ 1==1){ //POR EL MOTIVO QUE SEA, AHORA ME HA FUNCIONADO CON LINUX                    
                     ed.print(null, null, false, printServices[0], hpras, false);
                     if (copies>1) ed.print(null, null, false, printServices[0], hpras, false);
                     if (copies>2) ed.print(null, null, false, printServices[0], hpras, false);
                 }
                 else{
+                    
                     ed.print(null, null, false, printService, hpras, false);
                     if (copies>1) ed.print(null, null, false, printService, hpras, false);
                     if (copies>2) ed.print(null, null, false, printService, hpras, false);
